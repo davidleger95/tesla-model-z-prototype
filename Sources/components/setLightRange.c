@@ -7,9 +7,8 @@
 
 int lightMin = 0;
 
-int getLightValue(char level) {
-  level = tolower(level);
-  switch (level) {
+int getLightValue(unsigned char level) {
+  switch (tolower(level)) {
     case 'l': cLog("low\n"); break;
     case 'm': cLog("med\n"); break;
     case 'h': cLog("high\n"); break;

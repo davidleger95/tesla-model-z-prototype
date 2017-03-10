@@ -6,7 +6,6 @@ int isValid (char value, char * validChars) {
   while(validChars[i]){
     if (value == validChars[i++]) return value;
   }
-  printf("\nINVALID INPUT. Please try again.\n");
   return 0;
 }
 

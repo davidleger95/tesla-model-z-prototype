@@ -11,25 +11,26 @@ int speedMin = 0;
 int speedMax = 0;
 
 void setSpeedRange () {
-  cLog("setSpeedRange\n");
+  cLog("setSpeedRange\n\r");
 }
 
 void setDirection () {
-  cLog("setDirection\n");
+  cLog("setDirection\n\r");
 }
 
 void resetDefault () {
-  cLog("resetDefault\n");
+  cLog("resetDefault\n\r");
 }
 
 void quit () {
-  cLog("Saving configuration...\n");
+  cLog("Quitting...\n\r");
   // TODO save config data
-  cLog("Save complete! OK to disconnect device.\n");
+  cLog("OK to disconnect device.\n\r");
   configure = 0;
 }
 
 void config () {
+  blueLED(1);
   configure = 1;
   while (configure) {
     displayMainMenu();
@@ -42,6 +43,7 @@ void config () {
       case '0': quit(); break;
     }
   }
+  blueLED(0);
 }
 
 #endif
