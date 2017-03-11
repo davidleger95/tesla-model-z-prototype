@@ -18,7 +18,7 @@
 void displayMainMenu() {
   cLog("\n\r");
   cLog("----------------------------------------------------------------------\n\r");
-  cLog("| WELCOME TO TESLA MODEL Z CONSOLE!                                   |\n\r");
+  cLog("| WELCOME TO TESLA MODEL Z CLI!                                   |\n\r");
   cLog("----------------------------------------------------------------------\n\n\r");
   cLog("Here you can view the device's current configuration and a virtual \n\r");
   cLog("version of the user manual.\n\n\r");

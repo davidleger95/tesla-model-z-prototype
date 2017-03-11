@@ -14,7 +14,7 @@
 #include <ctype.h>
 #include "./utils/hw_interfaces.c"
 #include "./components/selectMode.c"
-#include "./components/config.c"
+#include "./components/cli.c"
 #include "./components/drive.c"
 
 int main () {
@@ -28,11 +28,16 @@ int main () {
 			  choice = 1;
 		  } else {
 			  //TODO check another switch (SW3?)
+			  // set PORT_PCR = ALT | IRQC;
+			  // NVIC_EnableIRQ(PORTx_IRQn);
+			  // void PORTE_IRQHandler(void) {
+			  // 	// do shit on interrupt
+		  	  //}
 		  }
 	  }
 	  redLED(0);
 	  if(choice == 1) {
-		  config();
+		  cli();
 	  } else {
 		  drive();
 	  }

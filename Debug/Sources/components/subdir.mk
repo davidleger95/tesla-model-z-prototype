@@ -4,19 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Sources/components/config.c \
+../Sources/components/cli.c \
 ../Sources/components/drive.c \
 ../Sources/components/selectMode.c \
 ../Sources/components/setLightRange.c 
 
 OBJS += \
-./Sources/components/config.o \
+./Sources/components/cli.o \
 ./Sources/components/drive.o \
 ./Sources/components/selectMode.o \
 ./Sources/components/setLightRange.o 
 
 C_DEPS += \
-./Sources/components/config.d \
+./Sources/components/cli.d \
 ./Sources/components/drive.d \
 ./Sources/components/selectMode.d \
 ./Sources/components/setLightRange.d 
