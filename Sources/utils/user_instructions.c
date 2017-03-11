@@ -1,8 +1,20 @@
+/*******************************************************************************
+ * PROJECT		Tesla Model Z Prototype
+ * AUTHOR(S)	David Leger
+ * 				Dylan Wood
+ * DATE			10 Mar, 2017
+ *
+ * FILE NAME	user_instructions.c
+ * DESCRIPTION	Holds the hard-coded text for the PuTTY CLI.
+ *
+ *******************************************************************************/
+
 #ifndef _INSTRUCTIONSC_
 #define _INSTRUCTIONSC_
 
 #include "./hw_interfaces.c"
 
+// TODO rewrite when functionality is implemented to match implementation.
 void displayMainMenu() {
   cLog("\n\r");
   cLog("----------------------------------------------------------------------\n\r");
@@ -19,6 +31,7 @@ void displayMainMenu() {
   cLog("\t [0] Quit the Tesla Model Z Console.\n\r");
 }
 
+// NOTE this is out of scope but leave it until functionality is implemented.
 void displaySetLightRangeInstructions () {
   cLog("\n\r");
   cLog("----------------------------------------------------------------------\n\n\r");
@@ -31,6 +44,7 @@ void displaySetLightRangeInstructions () {
   cLog("MIN LIGHT THRESHOLD: ");
 }
 
+// TODO write new options functions
 void displaySetSpeedRangeInstructions () {
   //TODO write instructions
 }

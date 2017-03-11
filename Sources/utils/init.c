@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * PROJECT		Tesla Model Z Prototype
+ * AUTHOR(S)	David Leger
+ * 				Dylan Wood
+ * DATE			10 Mar, 2017
+ *
+ * FILE NAME	init.c
+ * DESCRIPTION	Functions to initialize the hardware interfaces including UART0,
+ * 				GPIO, and ADC/DAC.
+ *
+ *******************************************************************************/
+
 #ifndef _INITC_
 #define _INITC_
 

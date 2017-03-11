@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * PROJECT		Tesla Model Z Prototype
+ * AUTHOR(S)	David Leger
+ * 				Dylan Wood
+ * DATE			10 Mar, 2017
+ *
+ * FILE NAME	setLightRange.c
+ * DESCRIPTION	TODO change to overview and menu to see details about specific items.
+ *
+ *******************************************************************************/
 #ifndef _SETLIGHTRANGE_
 #define _SETLIGHTRANGE_
 

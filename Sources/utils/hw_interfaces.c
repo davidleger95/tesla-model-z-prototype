@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * PROJECT		Tesla Model Z Prototype
+ * AUTHOR(S)	David Leger
+ * 				Dylan Wood
+ * DATE			10 Mar, 2017
+ *
+ * FILE NAME	hw_interface.c
+ * DESCRIPTION	Provides an abstraction layer to interface with the FRDM-K64
+ * 				board without knowing the board's specific registers or
+ * 				register masks.
+ *
+ *******************************************************************************/
+
 #ifndef _HW_INTERFACESH_
 #define _HW_INTERFACESH_
 #include "./init.c"
@@ -80,12 +93,12 @@ void blueLED (int turnOn) {
 }
 
 void redLED (int turnOn) {
-	if (turnOn) GPIOB_PDOR &= ~(0x1 << 22);		// Turn on BLUE LED (PTB21)
+	if (turnOn) GPIOB_PDOR &= ~(0x1 << 22);		// Turn on RED LED (PTB22)
 	else GPIOB_PDOR |= 0x01 << 22;
 }
 
 void greenLED (int turnOn) {
-	if (turnOn) GPIOE_PDOR &= ~(0x1 << 26);		// Turn on BLUE LED (PTB21)
+	if (turnOn) GPIOE_PDOR &= ~(0x1 << 26);		// Turn on GREEN LED (PTE26)
 	else GPIOE_PDOR |= 0x01 << 26;
 }
 

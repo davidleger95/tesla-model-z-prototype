@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * PROJECT		Tesla Model Z Prototype
+ * AUTHOR(S)	David Leger
+ * 				Dylan Wood
+ * DATE			10 Mar, 2017
+ *
+ * FILE NAME	main.c
+ * DESCRIPTION	Main program for the Tesla Model Z Prototype's software system.
+ *
+ *******************************************************************************/
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -7,7 +18,7 @@
 #include "./components/drive.c"
 
 int main () {
-	init();
+	init();		// initialize hardware
 
 	while (1) {
 		redLED(1);
