@@ -19,30 +19,19 @@
 
 int main () {
 	init();		// initialize hardware
-
+	redLED(1);
 	while (1) {
-		redLED(1);
-	  int choice = 0;
-	  while (!choice){
-		  if(SW2_Input()) {
-			  choice = 1;
-		  } else {
-			  //TODO check another switch (SW3?)
-			  // set PORT_PCR = ALT | IRQC;
-			  // NVIC_EnableIRQ(PORTx_IRQn);
-			  // void PORTE_IRQHandler(void) {
-			  // 	// do shit on interrupt
-		  	  //}
-		  }
-	  }
-	  redLED(0);
-	  if(choice == 1) {
+	  if(config_mode) {
+		  redLED(0);
 		  cli();
-	  } else {
-		  drive();
+		  redLED(1);
+		  config_mode = 0;
 	  }
-
+	  else if(drive_mode) {
+		  redLED(0);
+		  drive();
+		  drive_mode = 0;
+	  }
 	}
-
 	redLED(0);
 }

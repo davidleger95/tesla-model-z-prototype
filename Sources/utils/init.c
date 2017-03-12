@@ -49,13 +49,14 @@ void UART0_Interface_Init() {
 
 void GPIO_Init() {
 	// Activate PTB and PTC
-	SIM_SCGC5 |= SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTE_MASK;
+	SIM_SCGC5 |= SIM_SCGC5_PORTA_MASK | SIM_SCGC5_PORTB_MASK | SIM_SCGC5_PORTC_MASK | SIM_SCGC5_PORTE_MASK;
 
-	// Use ALT1 configuration for PTB and PTC
+	// Use ALT1 configuration for PTB and PTC2
+	PORTA_PCR4  |= PORT_PCR_MUX(1) | PORT_PCR_ISF(0x0) | PORT_PCR_IRQC(0xA);
 	PORTB_PCR21 |= PORT_PCR_MUX(1);
 	PORTB_PCR22 |= PORT_PCR_MUX(1);
+	PORTC_PCR6  |= PORT_PCR_MUX(1) | PORT_PCR_ISF(0x0) | PORT_PCR_IRQC(0xA);
 	PORTE_PCR26 |= PORT_PCR_MUX(1);
-	PORTC_PCR6 |= PORT_PCR_MUX(1);
 
 	// Set BLUE LED (PTB21) to output (high)
 	GPIOB_PDDR |= 0x1 << 21;
@@ -63,10 +64,19 @@ void GPIO_Init() {
 	GPIOE_PDDR |= 0x1 << 26;
 	// Set SW2 (PTC6) to input (low)
 	GPIOC_PDDR = 0x0 << 6;
+	// Set SW3 (PTA4) to input (low)
+	GPIOA_PDDR = 0x0 << 4;
 	// LED initially off (high)
 	GPIOB_PSOR |= 0x1 << 21;
 	GPIOB_PSOR |= 0x1 << 22;
 	GPIOE_PSOR |= 0x1 << 26;
+
+	// Clear ISFR flags
+	PORTA_ISFR = PORT_ISFR_ISF(0x10);
+	PORTC_ISFR = PORT_ISFR_ISF(0x40);
+	// Enable Interrupts
+	NVIC_EnableIRQ(PORTA_IRQn);
+	NVIC_EnableIRQ(PORTC_IRQn);
 }
 
 void init() {

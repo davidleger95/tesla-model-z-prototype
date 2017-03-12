@@ -56,7 +56,7 @@ all: tesla-model-z-prototype.elf secondary-outputs
 tesla-model-z-prototype.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross ARM C++ Linker'
-	arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g3 -T "MK64FN1M0xxx12_flash.ld" -Xlinker --gc-sections -L"T:/ECE3232/tesla-model-z-prototype/Project_Settings/Linker_Files" -Wl,-Map,"tesla-model-z-prototype.map" -specs=nosys.specs -specs=nano.specs -Xlinker -z -Xlinker muldefs -o "tesla-model-z-prototype.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-g++ -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -O0 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -Wall  -g3 -T "MK64FN1M0xxx12_flash.ld" -Xlinker --gc-sections -L"C:/Users/Dylan/Documents/GitHub/tesla-model-z-prototype/Project_Settings/Linker_Files" -Wl,-Map,"tesla-model-z-prototype.map" -specs=nosys.specs -specs=nano.specs -Xlinker -z -Xlinker muldefs -o "tesla-model-z-prototype.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

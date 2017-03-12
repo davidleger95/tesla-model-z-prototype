@@ -16,6 +16,9 @@
 #include "./init.c"
 #include "./utils.c"
 
+int drive_mode = 0;
+int config_mode = 0;
+
 /*******************************************************************************
  * UART0 INTERFACE
  *******************************************************************************/
@@ -100,6 +103,26 @@ void redLED (int turnOn) {
 void greenLED (int turnOn) {
 	if (turnOn) GPIOE_PDOR &= ~(0x1 << 26);		// Turn on GREEN LED (PTE26)
 	else GPIOE_PDOR |= 0x01 << 26;
+}
+
+/*******************************************************************************
+ * INTERRUPT HANDLERS
+ *******************************************************************************/
+
+void PORTA_IRQHandler(void){
+	//drive
+	drive_mode = 1;
+	config_mode = 0;
+
+	PORTA_ISFR = PORT_ISFR_ISF(0x10);
+}
+
+void PORTC_IRQHandler(void){
+	//config
+	drive_mode = 0;
+	config_mode = 1;
+
+	PORTC_ISFR = PORT_ISFR_ISF(0x40);
 }
 
 #endif
