@@ -77,6 +77,19 @@ char cGet() {
 }
 
 /*******************************************************************************
+ * DAC0 INTERFACE
+ *******************************************************************************/
+
+// Write's an integer corresponding to voltage to the DAC
+// voltage = Vd / Vref * 4096
+// Vd : Desired voltage
+// Vref : Reference voltage (e.g. 3.3V)
+void DAC0_Write(uint16_t voltage){
+	DAC0_DAT0L = (voltage & 0x00FF);
+	DAC0_DAT0H = ((voltage & 0x0F00) >> 8);
+}
+
+/*******************************************************************************
  * ONBOARD SWITCHES
  *******************************************************************************/
 
