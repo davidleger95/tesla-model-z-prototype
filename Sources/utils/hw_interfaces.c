@@ -122,14 +122,15 @@ void DAC0_Write(uint16_t voltage){
 	DAC0_DAT0H = ((voltage & 0x0F00) >> 8);
 }
 
-void setMotorSpeed(int lightIntensity) {
-	int motorVal = 0;
-	if(lightIntensity < MIN_LIGHT_INTENSITY) {
-		motorVal = 0;
-	} else if(lightIntensity > MAX_LIGHT_INTENSITY) {
-		motorVal = (((MAX_LIGHT_INTENSITY / 10) * REFERENCE_VOLTAGE) / REFERENCE_VOLTAGE) * 4096;
+//
+void setMotorSpeed(int motorSpeed) {
+	int motorDAC = 0;
+	if(motorSpeed < MIN_LIGHT_INTENSITY) {
+		motorDAC = 0;
+	} else if(motorSpeed > MAX_LIGHT_INTENSITY) {
+		motorDAC = (((MAX_LIGHT_INTENSITY / 10) * REFERENCE_VOLTAGE) / REFERENCE_VOLTAGE) * 4096;
 	} else {
-		motorVal = (((lightIntensity / 10) * REFERENCE_VOLTAGE) / REFERENCE_VOLTAGE) * 4096;
+		motorDAC = (((lightIntensity / 10) * REFERENCE_VOLTAGE) / REFERENCE_VOLTAGE) * 4096;
 	}
 
 	DAC0_Write(motorVal);

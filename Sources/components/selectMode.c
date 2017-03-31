@@ -12,13 +12,21 @@
 #define _SELECTMODEC_
 
 #include "../utils/hw_interfaces.c"
+#include "./cli.c"
+#include "./drive.c"
 
-// TODO pull the logic from main.c into here.
-int selectMode () {
-  char c = cGetValid("cdCD");
-  if (c == 'c')return 1;
-  if (c == 'd')return 2;
-  return 0;
+
+void selectMode () {
+	if(cli_mode) {
+		  redLED(0);
+		  cli();
+		  redLED(1);
+		  cli_mode = 0;
+	} else if(drive_mode) {
+		  redLED(0);
+		  drive();
+		  drive_mode = 0;
+	}
 }
 
 #endif
