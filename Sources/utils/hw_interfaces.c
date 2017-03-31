@@ -13,11 +13,15 @@
 
 #ifndef _HW_INTERFACESH_
 #define _HW_INTERFACESH_
+
 #include "./init.c"
 #include "./utils.c"
+#include "./../config.c"
+#include "math.h"
 
 int drive_mode = 0;
-int config_mode = 0;
+int cli_mode = 0;
+
 
 /*******************************************************************************
  * UART0 INTERFACE
@@ -41,7 +45,7 @@ char UART0_Getchar() {
 		}
 	}
 
-	return val;							  // fetch char from data register
+	return val;									// fetch char from data register
 }
 
 void UART0_Putstring(char * s) {
@@ -77,6 +81,35 @@ char cGet() {
 }
 
 /*******************************************************************************
+ * ADC0 INTERFACE
+ *******************************************************************************/
+unsigned short ADC_Convert() {
+	ADC0_SC1A = 18 & ADC_SC1_ADCH_MASK; 	//Write to SC1A to start conversion
+	while(ADC0_SC2 & ADC_SC2_ADACT_MASK);  			//Conversion in progress
+	while(!(ADC0_SC1A & ADC_SC1_COCO_MASK));	//Until conversion complete
+	ADC0_SC1A &= ~ADC_SC1_COCO_MASK;
+	return ADC0_RA;
+}
+
+
+int getLightVal() {
+	unsigned short adc_val = ADC_Convert();	//Value read from ADC0
+
+	//Represent this value to the nearest integer on a 0-9 scale
+	return 11 - ceil((adc_val / 0x3ff) * 11);
+}
+
+void DelayFunction (void)
+{
+	//TODO Shorten this delay
+	unsigned long Counter = 0xFFFFF;
+	do
+	{
+		Counter--;
+	}while(Counter);
+}
+
+/*******************************************************************************
  * DAC0 INTERFACE
  *******************************************************************************/
 
@@ -88,6 +121,20 @@ void DAC0_Write(uint16_t voltage){
 	DAC0_DAT0L = (voltage & 0x00FF);
 	DAC0_DAT0H = ((voltage & 0x0F00) >> 8);
 }
+
+void setMotorSpeed(int lightIntensity) {
+	int motorVal = 0;
+	if(lightIntensity < MIN_LIGHT_INTENSITY) {
+		motorVal = 0;
+	} else if(lightIntensity > MAX_LIGHT_INTENSITY) {
+		motorVal = (((MAX_LIGHT_INTENSITY / 10) * REFERENCE_VOLTAGE) / REFERENCE_VOLTAGE) * 4096;
+	} else {
+		motorVal = (((lightIntensity / 10) * REFERENCE_VOLTAGE) / REFERENCE_VOLTAGE) * 4096;
+	}
+
+	DAC0_Write(motorVal);
+}
+
 
 /*******************************************************************************
  * ONBOARD SWITCHES
@@ -125,7 +172,7 @@ void greenLED (int turnOn) {
 void PORTA_IRQHandler(void){
 	//drive
 	drive_mode = 1;
-	config_mode = 0;
+	cli_mode = 0;
 
 	PORTA_ISFR = PORT_ISFR_ISF(0x10);
 }
@@ -133,7 +180,7 @@ void PORTA_IRQHandler(void){
 void PORTC_IRQHandler(void){
 	//config
 	drive_mode = 0;
-	config_mode = 1;
+	cli_mode = 1;
 
 	PORTC_ISFR = PORT_ISFR_ISF(0x40);
 }

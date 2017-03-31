@@ -21,13 +21,12 @@ int main () {
 	init();		// initialize hardware
 	redLED(1);
 	while (1) {
-	  if(config_mode) {
+	  if(cli_mode) {
 		  redLED(0);
 		  cli();
 		  redLED(1);
-		  config_mode = 0;
-	  }
-	  else if(drive_mode) {
+		  cli_mode = 0;
+	  } else if(drive_mode) {
 		  redLED(0);
 		  drive();
 		  drive_mode = 0;

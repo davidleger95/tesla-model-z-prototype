@@ -9,44 +9,42 @@
  *
  *******************************************************************************/
 
-#ifndef _CONFIGC_
-#define _CONFIGC_
+#ifndef _CLIC_
+#define _CLIC_
 
 #include "../utils/user_instructions.c"
 #include "../utils/hw_interfaces.c"
-#include "./setLightRange.c"
-int configure = 1;
-int lightMax = 255;
+int loop = 1;
 
-int speedMin = 0;
-int speedMax = 0;
-
+//TODO Refactor
 void setSpeedRange () {
   cLog("setSpeedRange\n\r");
 }
 
+//TODO Refactor
 void setDirection () {
   cLog("setDirection\n\r");
 }
 
+//TODO Refactor
 void resetDefault () {
   cLog("resetDefault\n\r");
 }
 
+//TODO Refactor
 void quit () {
   cLog("Quitting...\n\r");
-  // TODO save config data
   cLog("OK to disconnect device.\n\r");
-  configure = 0;
+  loop = 0;
 }
 
 void cli () {
   blueLED(1);
-  configure = 1;
-  while (configure) {
+  loop = 1;
+  while (loop) {
     displayMainMenu();
     switch (cGetValid("123450")) {
-      case '1': setLightRange(); break;
+      //case '1': setLightRange(); break;
       case '2': setSpeedRange(); break;
       case '3': setDirection(); break;
       case '4': resetDefault(); break;

@@ -79,9 +79,40 @@ void GPIO_Init() {
 	NVIC_EnableIRQ(PORTC_IRQn);
 }
 
+void ADC0_Init(){
+	//enable clock to ADC0 module
+	SIM_SCGC6 |= SIM_SCGC6_ADC0_MASK;
+
+	//Setup pin mux to enable port
+	SIM_SCGC5 |= SIM_SCGC5_PORTE_MASK;
+	//using alt0 ADC0_SE18
+
+	ADC0_CFG1 |= (ADC_CFG1_ADIV(0b01) | !ADC_CFG1_ADLSMP_MASK | ADC_CFG1_MODE(0b10) | ADC_CFG1_ADICLK(0b00));
+	ADC0_SC2 |= ADC_SC2_REFSEL(1);
+	ADC0_SC1A |= ADC_SC1_ADCH(31);
+	// NOTE Using ADC0_CFG2 default: ADxxa channels selected and normal conversion sequence.
+}
+
+void DAC0_Init(){
+	// Using AIPS1 to access DAC0, SCGC2 must be enabled to DAC0
+	SIM_SCGC2 |= SIM_SCGC2_DAC0_MASK;
+
+	// Enable DAC, don't enable triggers
+	DAC0_C0 = 0;
+	DAC0_C1 = 0;
+	DAC0_C0 |= DAC_C0_DACEN_MASK | DAC_C0_DACRFS_MASK;
+
+	// Initialize the DAC output to Vin/4096
+	// TODO : Initial dac output should be 0
+	DAC0_DAT0L &= 0x00;
+	DAC0_DAT0H &= 0xF0;
+}
+
 void init() {
 	UART0_Interface_Init();
 	GPIO_Init();
+	ADC0_Init();
+	DAC0_Init();
 }
 
 #endif

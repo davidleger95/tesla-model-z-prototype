@@ -36,7 +36,7 @@ void displaySetLightRangeInstructions () {
   cLog("\n\r");
   cLog("----------------------------------------------------------------------\n\n\r");
   cLog("Set a value for the minimum light intensity that the device needs to\n\r");
-  cLog("start moving. Choolse from one of the following options:\n\r");
+  cLog("start moving. Choose from one of the following options:\n\r");
   cLog("\t [L] Low light.\n\r");
   cLog("\t [M] Medium light (default).\n\r");
   cLog("\t [H] High light.\n\r");

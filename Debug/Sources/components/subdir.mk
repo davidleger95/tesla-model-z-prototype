@@ -5,24 +5,18 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../Sources/components/cli.c \
-../Sources/components/config.c \
 ../Sources/components/drive.c \
-../Sources/components/selectMode.c \
-../Sources/components/setLightRange.c 
+../Sources/components/selectMode.c 
 
 OBJS += \
 ./Sources/components/cli.o \
-./Sources/components/config.o \
 ./Sources/components/drive.o \
-./Sources/components/selectMode.o \
-./Sources/components/setLightRange.o 
+./Sources/components/selectMode.o 
 
 C_DEPS += \
 ./Sources/components/cli.d \
-./Sources/components/config.d \
 ./Sources/components/drive.d \
-./Sources/components/selectMode.d \
-./Sources/components/setLightRange.d 
+./Sources/components/selectMode.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

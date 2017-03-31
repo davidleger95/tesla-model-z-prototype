@@ -17,15 +17,18 @@
 #include "../utils/hw_interfaces.c"
 
 void drive () {
-
   greenLED(1);
-  // TODO LOAD config data
+  int light_val = 0;
 
-  // TODO get light sensor value
+  //Device stays in drive mode until device is hard reset
+  //Continuously read ADC and output to DAC
+  while(1) {
+	  light_val = getLightVal();
+	  DelayFunction();
+	  setMotorSpeed(light_val);
+  }
 
-  // TODO calculate settings based on configuration
-
-  // TODO set motor value
+  // Will never reach, device will be in drive mode until it is reset
   greenLED(0);
 }
 
