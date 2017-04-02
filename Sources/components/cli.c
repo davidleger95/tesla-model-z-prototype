@@ -8,30 +8,30 @@
  * DESCRIPTION	Launches the Tesla Model Z Prototype CLI via the UART0 port.
  *
  *******************************************************************************/
-
 #ifndef _CLIC_
 #define _CLIC_
-
 #include "../utils/user_instructions.c"
-#include "../utils/hw_interfaces.c"
+#include "../utils/texts.c"
 int loop = 1;
 
-//TODO Refactor
-void setSpeedRange () {
-  cLog("setSpeedRange\n\r");
+void checkCurrentConfig () {
+  displayCurrentConfig();
+  cLog("[0] Back to Main Menu.\n\r");
+  cGetValid("0");
 }
 
-//TODO Refactor
-void setDirection () {
-  cLog("setDirection\n\r");
+void userManual () {
+  displayUserManual();
+  cLog("[0] Back to Main Menu.\n\r");
+  cGetValid("0");
 }
 
-//TODO Refactor
-void resetDefault () {
-  cLog("resetDefault\n\r");
+void asciiLogo () {
+  displayAsciiLogo();
+  cLog("[0] Back to Main Menu.\n\r");
+  cGetValid("0");
 }
 
-//TODO Refactor
 void quit () {
   cLog("Quitting...\n\r");
   cLog("OK to disconnect device.\n\r");
@@ -43,16 +43,13 @@ void cli () {
   loop = 1;
   while (loop) {
     displayMainMenu();
-    switch (cGetValid("123450")) {
-      //case '1': setLightRange(); break;
-      case '2': setSpeedRange(); break;
-      case '3': setDirection(); break;
-      case '4': resetDefault(); break;
-      case '5': displayUserManual(); break;
+    switch (cGetValid("1230")) {
+      case '1': checkCurrentConfig(); break;
+      case '2': userManual(); break;
+      case '3': asciiLogo(); break;
       case '0': quit(); break;
     }
   }
   blueLED(0);
 }
-
 #endif

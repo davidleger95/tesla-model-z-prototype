@@ -14,18 +14,37 @@
 #ifndef _DRIVEC_
 #define _DRIVEC_
 
+#include "math.h"
 #include "../utils/hw_interfaces.c"
+#include "./../config.c"
 
 void drive () {
   greenLED(1);
   int light_val = 0;
-
+  int speed = 0;
+  int range = MAX_LIGHT_INTENSITY - MIN_LIGHT_INTENSITY;
   //Device stays in drive mode until device is hard reset
   //Continuously read ADC and output to DAC
   while(1) {
 	  light_val = getLightVal();
-	  DelayFunction();
-	  setMotorSpeed(light_val);
+
+    // Normalize light intensity so that it is within the configured range.
+    if (light_val < MIN_LIGHT_INTENSITY) {
+      speed = 0;
+    } else if (light_val > MAX_LIGHT_INTENSITY) {
+      speed = 9;
+    } else {
+      speed = (light_val - MIN_LIGHT_INTENSITY) * (10 / (floor(range + 1)));
+    }
+
+    // Restrict speed to configured range.
+    if (speed < MIN_SPEED) {
+      speed = MIN_SPEED;
+    } else if (speed > MAX_SPEED) {
+      speed = MAX_SPEED;
+    }
+	  setMotorSpeed(speed);
+    DelayFunction();
   }
 
   // Will never reach, device will be in drive mode until it is reset

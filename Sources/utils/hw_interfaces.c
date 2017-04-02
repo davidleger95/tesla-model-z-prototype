@@ -9,15 +9,16 @@
  * 				board without knowing the board's specific registers or
  * 				register masks.
  *
- *******************************************************************************/
+ ******************************************************************************/
 
 #ifndef _HW_INTERFACESH_
 #define _HW_INTERFACESH_
 
+#include "math.h"
+
 #include "./init.c"
 #include "./utils.c"
 #include "./../config.c"
-#include "math.h"
 
 int drive_mode = 0;
 int cli_mode = 0;
@@ -25,7 +26,7 @@ int cli_mode = 0;
 
 /*******************************************************************************
  * UART0 INTERFACE
- *******************************************************************************/
+ ******************************************************************************/
 
 void UART0_Putchar(char c) {
 	while (!(UART0_S1 & UART_S1_TDRE_MASK));	// poll TDRE
@@ -38,14 +39,14 @@ char UART0_Getchar() {
 	while (c != '\r') {
 		val = c;
 		while (!(UART0_S1 & UART_S1_RDRF_MASK));  // poll RDRE
-		c = UART0_D;
+		c = UART0_D; 		// fetch char from data register
 		if (c > 0x20 && c != 0x7F) {
 			UART0_Putchar(0x7F);
 			UART0_Putchar(c);
 		}
 	}
 
-	return val;									// fetch char from data register
+	return val;		
 }
 
 void UART0_Putstring(char * s) {
@@ -69,9 +70,9 @@ char cGetValid(char * validChars) {
     if (!isValid(c, validChars)) {
     	cLog("\n\r\n\rINVALID INPUT! Please try again: ");
     }
-  } while (c < 0x20 || (validChars[0] != '\0' && !isValid(c, validChars))); // Wait for char within visible range.
+  } while (c < 0x20 || (validChars[0] != '\0' && !isValid(c, validChars))); 
+  // Wait for char within visible range.
 
-  //while(UART0_Getchar() != '\n');               // Skip to next line after enter.
   return c;
 }
 
@@ -82,11 +83,11 @@ char cGet() {
 
 /*******************************************************************************
  * ADC0 INTERFACE
- *******************************************************************************/
+ ******************************************************************************/
 unsigned short ADC_Convert() {
-	ADC0_SC1A = 18 & ADC_SC1_ADCH_MASK; 	//Write to SC1A to start conversion
-	while(ADC0_SC2 & ADC_SC2_ADACT_MASK);  			//Conversion in progress
-	while(!(ADC0_SC1A & ADC_SC1_COCO_MASK));	//Until conversion complete
+	ADC0_SC1A = 18 & ADC_SC1_ADCH_MASK; 	 //Write to SC1A to start conversion
+	while(ADC0_SC2 & ADC_SC2_ADACT_MASK);    //Conversion in progress
+	while(!(ADC0_SC1A & ADC_SC1_COCO_MASK)); //Until conversion complete
 	ADC0_SC1A &= ~ADC_SC1_COCO_MASK;
 	return ADC0_RA;
 }
@@ -94,24 +95,14 @@ unsigned short ADC_Convert() {
 
 int getLightVal() {
 	unsigned short adc_val = ADC_Convert();	//Value read from ADC0
-
+	int light_val = (10 - ceil((adc_val / 0x3ff) * 10));
 	//Represent this value to the nearest integer on a 0-9 scale
-	return 11 - ceil((adc_val / 0x3ff) * 11);
-}
-
-void DelayFunction (void)
-{
-	//TODO Shorten this delay
-	unsigned long Counter = 0xFFFFF;
-	do
-	{
-		Counter--;
-	}while(Counter);
+	return light_val;
 }
 
 /*******************************************************************************
  * DAC0 INTERFACE
- *******************************************************************************/
+ ******************************************************************************/
 
 // Write's an integer corresponding to voltage to the DAC
 // voltage = Vd / Vref * 4096
@@ -122,33 +113,13 @@ void DAC0_Write(uint16_t voltage){
 	DAC0_DAT0H = ((voltage & 0x0F00) >> 8);
 }
 
-void setMotorSpeed(int lightIntensity) {
-	int motorVal = 0;
-	if(lightIntensity < MIN_LIGHT_INTENSITY) {
-		motorVal = 0;
-	} else if(lightIntensity > MAX_LIGHT_INTENSITY) {
-		motorVal = (((MAX_LIGHT_INTENSITY / 10) * REFERENCE_VOLTAGE) / REFERENCE_VOLTAGE) * 4096;
-	} else {
-		motorVal = (((lightIntensity / 10) * REFERENCE_VOLTAGE) / REFERENCE_VOLTAGE) * 4096;
-	}
-
-	DAC0_Write(motorVal);
-}
-
-
-/*******************************************************************************
- * ONBOARD SWITCHES
- *******************************************************************************/
-
-// Reads from SW2 and writes to BLUE LED
-int SW2_Input() {
-	if (!(GPIOC_PDIR & 0x40)) return 1;		// Wait for SW2 (PTC6) to be pressed.
-	return 0;								// Turn on BLUE LED (PTB21)
+void setMotorSpeed(int speed) {
+	DAC0_Write(speed);
 }
 
 /*******************************************************************************
  * ONBOARD LEDs
- *******************************************************************************/
+ ******************************************************************************/
 
 void blueLED (int turnOn) {
 	if (turnOn) GPIOB_PDOR &= ~(0x1 << 21);		// Turn on BLUE LED (PTB21)
@@ -167,8 +138,9 @@ void greenLED (int turnOn) {
 
 /*******************************************************************************
  * INTERRUPT HANDLERS
- *******************************************************************************/
+ ******************************************************************************/
 
+// SW3 Handler
 void PORTA_IRQHandler(void){
 	//drive
 	drive_mode = 1;
@@ -177,6 +149,7 @@ void PORTA_IRQHandler(void){
 	PORTA_ISFR = PORT_ISFR_ISF(0x10);
 }
 
+// SW2 Handler
 void PORTC_IRQHandler(void){
 	//config
 	drive_mode = 0;
