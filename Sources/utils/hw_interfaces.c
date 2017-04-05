@@ -84,11 +84,11 @@ char cGet() {
  * ADC0 INTERFACE
  *******************************************************************************/
 unsigned short ADC_Convert() {
-	ADC0_SC1A = 18 & ADC_SC1_ADCH_MASK; 	//Write to SC1A to start conversion
-	while(ADC0_SC2 & ADC_SC2_ADACT_MASK);  			//Conversion in progress
-	while(!(ADC0_SC1A & ADC_SC1_COCO_MASK));	//Until conversion complete
-	ADC0_SC1A &= ~ADC_SC1_COCO_MASK;
-	return ADC0_RA;
+	ADC1_SC1A = 18 & ADC_SC1_ADCH_MASK; 	//Write to SC1A to start conversion
+	while(ADC1_SC2 & ADC_SC2_ADACT_MASK);  			//Conversion in progress
+	while(!(ADC1_SC1A & ADC_SC1_COCO_MASK));	//Until conversion complete
+	ADC1_SC1A &= ~ADC_SC1_COCO_MASK;
+	return ADC1_RA;
 }
 
 
@@ -96,13 +96,13 @@ int getLightVal() {
 	unsigned short adc_val = ADC_Convert();	//Value read from ADC0
 
 	//Represent this value to the nearest integer on a 0-9 scale
-	return 11 - ceil((adc_val / 0x3ff) * 11);
+	return (10 - ceil((((float) adc_val) / 0x3ff) * 10));
 }
 
 void DelayFunction (void)
 {
 	//TODO Shorten this delay
-	unsigned long Counter = 0xFFFFF;
+	unsigned long Counter = 0x5FFFF;
 	do
 	{
 		Counter--;
@@ -124,16 +124,9 @@ void DAC0_Write(uint16_t voltage){
 
 //
 void setMotorSpeed(int motorSpeed) {
-	int motorDAC = 0;
-	if(motorSpeed < MIN_LIGHT_INTENSITY) {
-		motorDAC = 0;
-	} else if(motorSpeed > MAX_LIGHT_INTENSITY) {
-		motorDAC = (((MAX_LIGHT_INTENSITY / 10) * REFERENCE_VOLTAGE) / REFERENCE_VOLTAGE) * 4096;
-	} else {
-		motorDAC = (((lightIntensity / 10) * REFERENCE_VOLTAGE) / REFERENCE_VOLTAGE) * 4096;
-	}
+	uint16_t motorDAC = 0.5 * (((((float) motorSpeed) / 9) * REFERENCE_VOLTAGE) / REFERENCE_VOLTAGE) * 4096;
 
-	DAC0_Write(motorVal);
+	DAC0_Write(motorDAC);
 }
 
 

@@ -15,7 +15,7 @@
 #define MIN_LIGHT_INTENSITY  	3
 #define MAX_LIGHT_INTENSITY 	8
 #define MIN_SPEED				0
-#define MAX_SPEED				10
+#define MAX_SPEED				4
 
 #define REFERENCE_VOLTAGE 		3.3
 

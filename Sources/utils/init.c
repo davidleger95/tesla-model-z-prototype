@@ -81,6 +81,14 @@ void GPIO_Init() {
 
 void ADC0_Init(){
 	//enable clock to ADC0 module
+	SIM_SCGC3 |= SIM_SCGC3_ADC1_MASK;
+
+	ADC1_CFG1 |= ADC_CFG1_MODE(0b10);
+	//ADC1_SC2 |= ADC_SC2_REFSEL(1);
+	ADC1_SC1A |= 0x1FF;
+
+	/*
+	//enable clock to ADC0 module
 	SIM_SCGC6 |= SIM_SCGC6_ADC0_MASK;
 
 	//Setup pin mux to enable port
@@ -90,7 +98,7 @@ void ADC0_Init(){
 	ADC0_CFG1 |= (ADC_CFG1_ADIV(0b01) | !ADC_CFG1_ADLSMP_MASK | ADC_CFG1_MODE(0b10) | ADC_CFG1_ADICLK(0b00));
 	ADC0_SC2 |= ADC_SC2_REFSEL(1);
 	ADC0_SC1A |= ADC_SC1_ADCH(31);
-	// NOTE Using ADC0_CFG2 default: ADxxa channels selected and normal conversion sequence.
+	// NOTE Using ADC0_CFG2 default: ADxxa channels selected and normal conversion sequence.*/
 }
 
 void DAC0_Init(){
